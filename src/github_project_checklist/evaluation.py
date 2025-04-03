@@ -1,11 +1,21 @@
+import os
+from dotenv import load_dotenv
 import requests
+import pandas as pd
 
-def get_github_project_info(owner, repo, token):
+load_dotenv()
+
+# Retrieve the token from .env, default to None if not found
+TOKEN = os.getenv('GITHUB_TOKEN')
+
+
+def get_github_project_info(owner, repo, token=TOKEN):
     # Define the headers with the token for authentication
     headers = {
-        'Authorization': f'token {token}',
         'Accept': 'application/vnd.github.v3+json'
     }
+    if token:
+        headers['Authorization'] = f'token {token}'
 
     # API endpoints
     repo_url = f'https://api.github.com/repos/{owner}/{repo}'
@@ -21,6 +31,7 @@ def get_github_project_info(owner, repo, token):
 
     # Get issues information
     issues = requests.get(issues_url, headers=headers, params={'state': 'all'}).json()
+    #print(issues)
     total_issues = len(issues)
     unresolved_issues = len([issue for issue in issues if issue['state'] == 'open'])
     oldest_issue_date = min(issues, key=lambda x: x['created_at'])['created_at'] if issues else None
@@ -34,8 +45,10 @@ def get_github_project_info(owner, repo, token):
     print(f"Last updated on: {last_update}")
     print(f"Total issues: {total_issues}, Unresolved issues: {unresolved_issues}")
     print(f"Oldest unresolved issue date: {oldest_issue_date}")
+    print(f"Pulls: {len(pulls)}")
+    print(f"Resolved pulls: {len(resolved_pulls)}")
     print(f"Average time to close a pull request: {average_time_to_close_pr} days")
     print(f"Watchers: {watchers_count}, Stars: {stars_count}, Forks: {forks_count}")
 
 # Example usage
-get_github_project_info('owner_name', 'repo_name', 'your_github_token')
+get_github_project_info('romilly', 'rpi-docker-tensorflow')
