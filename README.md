@@ -2,6 +2,8 @@
 
 A Python script to fetch and analyze various metrics from GitHub repositories, such as the number of issues, pull requests, stars, forks, and more. It provides insights such as the total and unresolved issues, average time to close pull requests, and the oldest unresolved issue date.
 
+The code is based on a [checklist](docs/github-checklist.pdf) that I've used for a while.
+
 ## Features
 - Analyze general repository statistics:
     - Stars ⭐
@@ -28,10 +30,24 @@ A Python script to fetch and analyze various metrics from GitHub repositories, s
     - `pandas`
     - `python-dotenv`
 
-You can install the required libraries with:
-``` bash
+## Setup
+1. Create and activate a virtual environment:
+```bash
+# Create virtual environment
+python -m venv venv
+
+# Activate virtual environment
+# On Windows:
+venv\Scripts\activate
+# On macOS/Linux:
+source venv/bin/activate
+```
+
+2. Install the required libraries:
+```bash
 pip install -r requirements.txt
 ```
+
 ## Usage
 Before running the script, create a `.env` file in the root directory of your project and add your GitHub personal access token like this:
 ``` 
@@ -47,7 +63,7 @@ Once your `.env` file is created, run the script as follows:
 python evaluation.py
 ```
 ### Example Output
-Here’s what you might see when analyzing a repository:
+Here's what you might see when analyzing a repository:
 ``` 
 Last updated on: 2023-10-10T10:00:00Z
 Total issues: 152, Unresolved issues: 32
