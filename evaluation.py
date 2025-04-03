@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 import requests
 import pandas as pd
 
+# Load environment variables from .env file
 load_dotenv()
 
 # Retrieve the token from .env, default to None if not found
@@ -31,7 +32,6 @@ def get_github_project_info(owner, repo, token=TOKEN):
 
     # Get issues information
     issues = requests.get(issues_url, headers=headers, params={'state': 'all'}).json()
-    #print(issues)
     total_issues = len(issues)
     unresolved_issues = len([issue for issue in issues if issue['state'] == 'open'])
     oldest_issue_date = min(issues, key=lambda x: x['created_at'])['created_at'] if issues else None
@@ -39,7 +39,9 @@ def get_github_project_info(owner, repo, token=TOKEN):
     # Get pull requests information
     pulls = requests.get(pulls_url, headers=headers, params={'state': 'all'}).json()
     resolved_pulls = [pull for pull in pulls if pull['state'] == 'closed']
-    average_time_to_close_pr = (sum((pd.to_datetime(pull['closed_at']) - pd.to_datetime(pull['created_at'])).days for pull in resolved_pulls) / len(resolved_pulls)) if resolved_pulls else 0
+    average_time_to_close_pr = (sum(
+        (pd.to_datetime(pull['closed_at']) - pd.to_datetime(pull['created_at'])).days for pull in resolved_pulls) / len(
+        resolved_pulls)) if resolved_pulls else 0
 
     # Output the results
     print(f"Last updated on: {last_update}")
@@ -49,6 +51,7 @@ def get_github_project_info(owner, repo, token=TOKEN):
     print(f"Resolved pulls: {len(resolved_pulls)}")
     print(f"Average time to close a pull request: {average_time_to_close_pr} days")
     print(f"Watchers: {watchers_count}, Stars: {stars_count}, Forks: {forks_count}")
+
 
 # Example usage
 get_github_project_info('romilly', 'rpi-docker-tensorflow')
