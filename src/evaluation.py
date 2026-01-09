@@ -54,4 +54,4 @@ def get_github_project_info(owner, repo, token=TOKEN):
 
 
 # Example usage
-get_github_project_info('romilly', 'rpi-docker-tensorflow')
+# get_github_project_info('romilly', 'rpi-docker-tensorflow')
